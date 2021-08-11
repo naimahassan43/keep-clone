@@ -12,6 +12,7 @@ class App {
     this.noteTitle = document.querySelector("#note-title");
     this.noteText = document.querySelector("#note-text");
     this.formButtons = document.querySelector("#form-buttons");
+    this.formCloseButton = document.querySelector("#form-close-button");
     this.notes = document.querySelector("#notes");
     this.placeholder = document.querySelector("#placeholder");
 
@@ -30,6 +31,11 @@ class App {
       if (hasNote) {
         this.addNote({ title, text });
       }
+    });
+
+    this.formCloseButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      this.closeForm();
     });
   }
   handleFormClick(event) {
