@@ -5,13 +5,15 @@ class App {
 
     //State control
 
-    this.notes = [];
+    this.noteArray = [];
 
     //html elements
     this.form = document.querySelector("#form");
     this.noteTitle = document.querySelector("#note-title");
     this.noteText = document.querySelector("#note-text");
     this.formButtons = document.querySelector("#form-buttons");
+    this.notes = document.querySelector("#notes");
+    this.placeholder = document.querySelector("#placeholder");
 
     //METHOD
     this.addEventListeners();
@@ -60,9 +62,37 @@ class App {
       color: "white",
       id: this.notes.length > 0 ? this.notes[this.notes.length - 1].id + 1 : 1,
     };
-    this.notes = [...this.notes, newNote];
-    // console.log(this.notes);
+    // this.noteArray = [...this.noteArray, newNote];
+    this.noteArray.push(newNote);
+    console.log(this.noteArray);
+    this.display();
     this.closeForm();
+  }
+  display() {
+    const hasNote = this.noteArray.length > 0;
+    if (hasNote) {
+      this.placeholder.style.display = "none";
+    } else {
+      this.placeholder.style.display = "flex";
+    }
+
+    this.notes.innerHTML = this.noteArray
+      .map(
+        (note) => `
+              <div style="background: ${note.color}" class="note">
+                  <div class="note-title">${note.title}</div>
+                  <div class="note-text">${note.text}</div>
+                <div class="toolbar-container">
+                    <div class="toolbar">
+                        <img class="toolbar-color" src="https://icon.now.sh/palette">
+                        <img class="toolbar-delete" src="images/delete.png">
+                    </div>
+                </div>
+              </div>
+    
+    `
+      )
+      .join("");
   }
 }
 new App();
