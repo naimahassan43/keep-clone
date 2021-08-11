@@ -5,7 +5,7 @@ class App {
 
     //State control
 
-    this.noteArray = [];
+    this.noteArray = JSON.parse(localStorage.getItem("notes")) || [];
 
     //html elements
     this.form = document.querySelector("#form");
@@ -17,6 +17,7 @@ class App {
     this.placeholder = document.querySelector("#placeholder");
 
     //METHOD
+    this.render();
     this.addEventListeners();
   }
   addEventListeners() {
@@ -71,8 +72,17 @@ class App {
     // this.noteArray = [...this.noteArray, newNote];
     this.noteArray.push(newNote);
     console.log(this.noteArray);
-    this.display();
+    this.render();
+
     this.closeForm();
+  }
+  render() {
+    this.saveNotes();
+    this.display();
+  }
+  //Save notes to local storage
+  saveNotes() {
+    localStorage.setItem("notes", JSON.stringify(this.noteArray));
   }
   display() {
     const hasNote = this.noteArray.length > 0;
