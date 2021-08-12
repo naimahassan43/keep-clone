@@ -6,6 +6,8 @@ class App {
     //State control
 
     this.noteArray = JSON.parse(localStorage.getItem("notes")) || [];
+    this.title = "";
+    this.text = "";
 
     //html elements
     this.form = document.querySelector("#form");
@@ -15,6 +17,9 @@ class App {
     this.formCloseButton = document.querySelector("#form-close-button");
     this.notes = document.querySelector("#notes");
     this.placeholder = document.querySelector("#placeholder");
+    this.modal = document.querySelector(".modal");
+    this.modalTitle = document.querySelector(".modal-title");
+    this.modalText = document.querySelector(".modal-text");
 
     //METHOD
     this.render();
@@ -23,6 +28,8 @@ class App {
   addEventListeners() {
     document.body.addEventListener("click", (event) => {
       this.handleFormClick(event);
+      this.selectNote(event);
+      this.openModal(event);
     });
     this.form.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -61,7 +68,14 @@ class App {
     this.noteTitle.value = "";
     this.noteText.value = "";
   }
-
+  openModal(event) {
+    if (event.target.closest(".note")) {
+      console.log("Modal clicked");
+      this.modal.classList.toggle("open-modal");
+      this.modalText.value = this.text;
+      this.modalTitle.value = this.title;
+    }
+  }
   addNote(note) {
     const newNote = {
       title: note.title,
@@ -80,6 +94,15 @@ class App {
     this.saveNotes();
     this.display();
   }
+
+  selectNote(event) {
+    const selectNote = event.target.closest(".note");
+    // console.log(selectNote.children);
+    const [notetitle, notetext] = selectNote.children;
+    this.title = notetitle.textContent;
+    this.text = notetext.textContent;
+  }
+
   //Save notes to local storage
   saveNotes() {
     localStorage.setItem("notes", JSON.stringify(this.noteArray));
