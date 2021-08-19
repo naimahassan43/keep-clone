@@ -119,7 +119,7 @@ class App {
     this.id = event.target.dataset.id;
     const coOrdinate = event.target.getBoundingClientRect();
     const horizontal = coOrdinate.left + window.scrollX;
-    const vertical = window.scrollY - 20;
+    const vertical = window.scrollY - 25;
     this.colorToolTip.style.transform = `translate(${horizontal}px, ${vertical}px)`;
     this.colorToolTip.style.display = "flex";
   }
