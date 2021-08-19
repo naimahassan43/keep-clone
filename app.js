@@ -5,8 +5,8 @@ class App {
 
     //State control
 
-    // this.noteArray = JSON.parse(localStorage.getItem("notes")) || [];
-    this.noteArray = [];
+    this.noteArray = JSON.parse(localStorage.getItem("notes")) || [];
+    // this.noteArray = [];
     this.title = "";
     this.text = "";
     this.id = "";
@@ -31,19 +31,20 @@ class App {
   }
   addEventListeners() {
     document.body.addEventListener("click", (event) => {
+      this.deleteNote(event);
       this.handleFormClick(event);
       this.selectNote(event);
       this.openModal(event);
-      // this.deleteNote(event);
+      // this.openTooltip(event);
     });
 
     document.body.addEventListener("mouseover", (event) => {
       this.openTooltip(event);
     });
 
-    // document.body.addEventListener("mouseout", (event) => {
-    //   this.closeTooltip(event);
-    // });
+    document.body.addEventListener("mouseout", (event) => {
+      this.closeTooltip(event);
+    });
     this.colorToolTip.addEventListener("click", (event) => {
       const color = event.target.dataset.color;
       if (color) {
@@ -113,15 +114,19 @@ class App {
   }
 
   openTooltip(event) {
+    // event.stopPropagation();
     if (!event.target.matches(".toolbar-color")) return;
     this.id = event.target.dataset.id;
     const coOrdinate = event.target.getBoundingClientRect();
     const horizontal = coOrdinate.left + window.scrollX;
-    const vertical = window.scrollY - 15;
+    const vertical = window.scrollY - 20;
     this.colorToolTip.style.transform = `translate(${horizontal}px, ${vertical}px)`;
     this.colorToolTip.style.display = "flex";
   }
 
+  closeTooltip(event) {
+    this.colorToolTip.style.display = "none";
+  }
   addNote(note) {
     const newNote = {
       title: note.title,
@@ -173,24 +178,25 @@ class App {
     console.log(this.id);
   }
 
-  // deleteNote(event) {
-  //   event.stopPropagation();
-  //   if (!event.target.matches(".toolbar-delete")) return;
-  //   const id = event.target.dataset.id;
-  //   this.noteArray = this.noteArray.filter((note) => note.id !== Number(id));
+  deleteNote(event) {
+    // event.stopPropagation();
+    if (!event.target.matches(".toolbar-delete")) return;
+    const id = event.target.dataset.id;
+    this.noteArray = this.noteArray.filter((note) => note.id !== Number(id));
 
-  //   this.render();
-  // }
+    this.render();
+  }
 
   render() {
-    // this.saveNotes();
+    this.saveNotes();
     this.display();
   }
 
   //Save notes to local storage
-  // saveNotes() {
-  //   localStorage.setItem("notes", JSON.stringify(this.noteArray));
-  // }
+  saveNotes() {
+    localStorage.setItem("notes", JSON.stringify(this.noteArray));
+  }
+
   display() {
     const hasNote = this.noteArray.length > 0;
     if (hasNote) {
@@ -207,12 +213,11 @@ class App {
                   <div class="note-text">${note.text}</div>
                 <div class="toolbar-container">
                     <div class="toolbar">
-                        <img class="toolbar-color" src="https://icon.now.sh/palette" data-id="${note.id}">
-                        <img class="toolbar-delete" src="images/delete.png">
+                        <img class="toolbar-color" src="images/color-palette.png" data-id="${note.id}">
+                        <img class="toolbar-delete" src="images/delete.png" data-id="${note.id}">
                     </div>
                 </div>
               </div>
-    
     `
       )
       .join("");
